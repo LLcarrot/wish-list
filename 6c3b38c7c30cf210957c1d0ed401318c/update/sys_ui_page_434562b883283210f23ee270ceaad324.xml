@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_1108048_wish_l_0_demo_case_manager.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+<html>
+<head>
+  <style>
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    .form-section {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+    }
+    .list-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    .button-group {
+      margin-top: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    .search-box {
+      margin-bottom: 20px;
+    }
+    .search-box input {
+      width: 300px;
+    }
+    .hidden {
+      display: none;
+    }
+    .record-item {
+      padding: 10px;
+      border: 1px solid #eee;
+      margin-bottom: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .record-item:hover {
+      background: #f8f9fa;
+    }
+    .record-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .record-question {
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 表单部分 -->
+    <div class="form-section">
+      <h2 id="form-title">新建 Demo Case</h2>
+      <div class="form-group">
+        <label for="title">标题 (Title):</label>
+        <input type="text" id="title" placeholder="输入标题"/>
+      </div>
+      <div class="form-group">
+        <label for="question">问题 (Question):</label>
+        <textarea id="question" placeholder="输入问题描述"></textarea>
+      </div>
+      <div class="button-group">
+        <button class="btn btn-primary" id="new-btn" onclick="newRecord()">新建</button>
+        <button class="btn btn-success hidden" id="update-btn" onclick="updateRecord()">更新</button>
+        <button class="btn btn-danger hidden" id="delete-btn" onclick="deleteRecord()">删除</button>
+        <button class="btn btn-secondary" onclick="clearForm()">清空</button>
+      </div>
+      <input type="hidden" id="current_sys_id"/>
+    </div>
+
+    <!-- 列表部分 -->
+    <div class="list-section">
+      <h2>Demo Case 列表</h2>
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="搜索标题或问题..." onkeyup="searchRecords()"/>
+      </div>
+      <div id="records-list">
+        <!-- 记录列表将在这里动态加载 -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 页面加载时初始化
+    window.onload = function() {
+      loadRecords();
+      setFormMode('new');
+    };
+
+    // 设置表单模式（新建/编辑）
+    function setFormMode(mode) {
+      var newBtn = document.getElementById('new-btn');
+      var updateBtn = document.getElementById('update-btn');
+      var deleteBtn = document.getElementById('delete-btn');
+      var formTitle = document.getElementById('form-title');
+
+      if (mode === 'new') {
+        newBtn.classList.remove('hidden');
+        updateBtn.classList.add('hidden');
+        deleteBtn.classList.add('hidden');
+        formTitle.textContent = '新建 Demo Case';
+        clearForm();
+      } else {
+        newBtn.classList.add('hidden');
+        updateBtn.classList.remove('hidden');
+        deleteBtn.classList.remove('hidden');
+        formTitle.textContent = '编辑 Demo Case';
+      }
+    }
+
+    // 清空表单
+    function clearForm() {
+      document.getElementById('title').value = '';
+      document.getElementById('question').value = '';
+      document.getElementById('current_sys_id').value = '';
+      setFormMode('new');
+    }
+
+    // 加载记录列表
+    function loadRecords(searchTerm) {
+      var ga = new GlideAjax('GlobalClientUtils');
+      ga.addParam('sysparm_name', 'executeGet');
+      ga.addParam('sysparm_table', 'x_your_scope_demo_case'); // 请替换为实际的表名
+      
+      var query = '';
+      if (searchTerm) {
+        query = 'titleLIKE' + searchTerm + '^ORquestionLIKE' + searchTerm;
+      }
+      ga.addParam('sysparm_query', query);
+      ga.addParam('sysparm_fields', 'sys_id,title,question');
+      ga.addParam('sysparm_display_value', 'true');
+      
+      ga.getXML(function(response) {
+        var records = [];
+        try {
+          var xmlDoc = response.responseXML;
+          var answer = xmlDoc.getElementsByTagName("answer")[0].textContent;
+          if (answer) {
+            records = JSON.parse(answer).result;
+          }
+        } catch (e) {
+          console.error('Error parsing response:', e);
+        }
+        displayRecords(records);
+      });
+    }
+
+    // 显示记录列表
+    function displayRecords(records) {
+      var recordsList = document.getElementById('records-list');
+      recordsList.innerHTML = '';
+
+      if (records.length === 0) {
+        recordsList.innerHTML = '<p>没有找到记录</p>';
+        return;
+      }
+
+      records.forEach(function(record) {
+        var recordDiv = document.createElement('div');
+        recordDiv.className = 'record-item';
+        recordDiv.onclick = function() {
+          loadRecordForEdit(record.sys_id, record.title, record.question);
+        };
+        
+        recordDiv.innerHTML = '&lt;div class="record-title"&gt;' + (record.title || '无标题') + '&lt;/div&gt;' +
+                             '&lt;div class="record-question"&gt;' + (record.question || '无问题描述') + '&lt;/div&gt;';
+        
+        recordsList.appendChild(recordDiv);
+      });
+    }
+
+    // 加载记录到表单进行编辑
+    function loadRecordForEdit(sys_id, title, question) {
+      document.getElementById('current_sys_id').value = sys_id;
+      document.getElementById('title').value = title || '';
+      document.getElementById('question').value = question || '';
+      setFormMode('edit');
+    }
+
+    // 搜索记录
+    function searchRecords() {
+      var searchTerm = document.getElementById('search-input').value;
+      loadRecords(searchTerm);
+    }
+
+    // 新建记录
+    function newRecord() {
+      var title = document.getElementById('title').value;
+      var question = document.getElementById('question').value;
+
+      if (!title) {
+        alert('请输入标题');
+        return;
+      }
+
+      var ga = new GlideAjax('GlobalClientUtils');
+      ga.addParam('sysparm_name', 'executeInsert');
+      ga.addParam('sysparm_table', 'x_your_scope_demo_case'); // 请替换为实际的表名
+      ga.addParam('sysparm_values', JSON.stringify({
+        title: title,
+        question: question
+      }));
+      
+      ga.getXML(function(response) {
+        var result = getResponseResult(response);
+        if (result &amp;&amp; result.sys_id) {
+          alert('记录创建成功！');
+          clearForm();
+          loadRecords();
+        } else {
+          alert('创建记录失败');
+        }
+      });
+    }
+
+    // 更新记录
+    function updateRecord() {
+      var sys_id = document.getElementById('current_sys_id').value;
+      var title = document.getElementById('title').value;
+      var question = document.getElementById('question').value;
+
+      if (!sys_id || !title) {
+        alert('缺少必要信息');
+        return;
+      }
+
+      var ga = new GlideAjax('GlobalClientUtils');
+      ga.addParam('sysparm_name', 'executeUpdate');
+      ga.addParam('sysparm_table', 'x_your_scope_demo_case'); // 请替换为实际的表名
+      ga.addParam('sysparm_sys_id', sys_id);
+      ga.addParam('sysparm_values', JSON.stringify({
+        title: title,
+        question: question
+      }));
+      
+      ga.getXML(function(response) {
+        var result = getResponseResult(response);
+        if (result) {
+          alert('记录更新成功！');
+          clearForm();
+          loadRecords();
+        } else {
+          alert('更新记录失败');
+        }
+      });
+    }
+
+    // 删除记录
+    function deleteRecord() {
+      var sys_id = document.getElementById('current_sys_id').value;
+
+      if (!sys_id) {
+        alert('没有选择要删除的记录');
+        return;
+      }
+
+      if (!confirm('确定要删除这条记录吗？')) {
+        return;
+      }
+
+      var ga = new GlideAjax('GlobalClientUtils');
+      ga.addParam('sysparm_name', 'executeDelete');
+      ga.addParam('sysparm_table', 'x_your_scope_demo_case'); // 请替换为实际的表名
+      ga.addParam('sysparm_sys_id', sys_id);
+      
+      ga.getXML(function(response) {
+        var result = getResponseResult(response);
+        if (result) {
+          alert('记录删除成功！');
+          clearForm();
+          loadRecords();
+        } else {
+          alert('删除记录失败');
+        }
+      });
+    }
+
+    // 解析响应结果
+    function getResponseResult(response) {
+      try {
+        var xmlDoc = response.responseXML;
+        var answer = xmlDoc.getElementsByTagName("answer")[0].textContent;
+        return answer ? JSON.parse(answer) : null;
+      } catch (e) {
+        console.error('Error parsing response:', e);
+        return null;
+      }
+    }
+  </script>
+</body>
+</html>
+</j:jelly>]]></html>
+        <name>demo_case_manager</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-10 09:59:02</sys_created_on>
+        <sys_id>434562b883283210f23ee270ceaad324</sys_id>
+        <sys_mod_count>12</sys_mod_count>
+        <sys_name>demo_case_manager</sys_name>
+        <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+        <sys_update_name>sys_ui_page_434562b883283210f23ee270ceaad324</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-11 02:06:05</sys_updated_on>
+    </sys_ui_page>
+</record_update>

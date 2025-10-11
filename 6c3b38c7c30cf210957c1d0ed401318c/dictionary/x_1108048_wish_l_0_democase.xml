@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="d017512883a03210f23ee270ceaad36c" label="DemoCase" max_length="40" name="x_1108048_wish_l_0_democase" type="collection">
+        <element label="Question" max_length="10000" name="question" type="string"/>
+        <element label="Ask from" max_length="32" name="ask_from" reference="sys_user" type="reference"/>
+        <element label="Add file" max_length="40" name="add_file" type="file_attachment"/>
+        <element label="Ask for" max_length="1024" name="ask_for" reference="sys_user" type="glide_list"/>
+        <element label="Died line" max_length="40" name="died_line" type="glide_date"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element label="Title" max_length="120" name="title" type="string"/>
+        <index name="index">
+            <element name="ask_from"/>
+        </index>
+    </element>
+</database>

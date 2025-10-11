@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_1108048_wish_l_0.CaseDemoUtils</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <mobile_callable>false</mobile_callable>
+        <name>CaseDemoUtils</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var CaseDemoUtils = Class.create();
+CaseDemoUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+  
+    searchCaseDemoRecords: function() {
+        var keyword = this.getParameter('sysparm_keyword');
+        var results = [];
+        
+        // 使用自定义表名
+        var gr = new GlideRecord('x_1108048_wish_l_0_democase');
+        
+        if (keyword) {
+            // 全文搜索，匹配所有可搜索字段
+            gr.addQuery('123TEXTQUERY321', keyword);
+        }
+        
+        gr.addActiveQuery();
+        gr.orderByDesc('sys_updated_on');
+        gr.setLimit(15);
+        gr.query();
+        
+        while (gr.next()) {
+            results.push({
+                sys_id: gr.getUniqueValue(),
+                number: gr.getDisplayValue('number') || gr.getDisplayValue('u_number'), // 根据实际字段名调整
+                title: gr.getDisplayValue('title') || gr.getDisplayValue('u_title'),
+                question: gr.getDisplayValue('question') || gr.getDisplayValue('u_question'),
+                // 添加其他需要显示的字段
+                ask_for: gr.getDisplayValue('ask_for') || gr.getDisplayValue('u_ask_for'),
+                ask_from: gr.getDisplayValue('ask_from') || 'N/A'
+            });
+        }
+        
+        return JSON.stringify(results);
+    },
+
+    type: 'CaseDemoUtils'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-10 07:12:57</sys_created_on>
+        <sys_id>b5c5867083a43210f23ee270ceaad38b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>CaseDemoUtils</sys_name>
+        <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+        <sys_update_name>sys_script_include_b5c5867083a43210f23ee270ceaad38b</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-10 07:12:57</sys_updated_on>
+    </sys_script_include>
+</record_update>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="DELETE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_1108048_wish_l_0_case_list_with_custom_search.do</endpoint>
+        <html>&lt;?xml version="1.0" encoding="utf-8" ?&gt;&#13;
+&lt;j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null"&gt;&#13;
+  &#13;
+  &lt;!-- 上部：自定义检索区块 --&gt;&#13;
+  &lt;div class="panel panel-default" style="margin-bottom: 20px;"&gt;&#13;
+    &lt;div class="panel-heading"&gt;&#13;
+      &lt;h3 class="panel-title"&gt;🔍 快速检索&lt;/h3&gt;&#13;
+    &lt;/div&gt;&#13;
+    &lt;div class="panel-body"&gt;&#13;
+      &lt;div class="form-group"&gt;&#13;
+        &lt;input &#13;
+          type="text" &#13;
+          class="form-control" &#13;
+          id="customSearchInput" &#13;
+          placeholder="输入编号、描述等关键词..." &#13;
+          onkeyup="performCustomSearch(this.value)"&#13;
+          style="max-width: 400px;"&#13;
+        /&gt;&#13;
+        &lt;small class="text-muted"&gt;实时搜索，输入后自动显示结果&lt;/small&gt;&#13;
+      &lt;/div&gt;&#13;
+      &#13;
+      &lt;!-- 自定义搜索结果 --&gt;&#13;
+      &lt;div id="customSearchResults"&gt;&#13;
+        &lt;p class="text-muted"&gt;请输入搜索关键词...&lt;/p&gt;&#13;
+      &lt;/div&gt;&#13;
+    &lt;/div&gt;&#13;
+  &lt;/div&gt;&#13;
+&#13;
+  &lt;!-- 下部：保留原有的记录列表 --&gt;&#13;
+  &lt;div class="panel panel-default"&gt;&#13;
+    &lt;div class="panel-heading"&gt;&#13;
+      &lt;h3 class="panel-title"&gt;📋 所有记录列表&lt;/h3&gt;&#13;
+    &lt;/div&gt;&#13;
+    &lt;div class="panel-body"&gt;&#13;
+      &lt;!-- 嵌入标准的列表视图 --&gt;&#13;
+      &lt;g2:evaluate var="jvar_table" expression="'incident'"/&gt;&#13;
+      &lt;g2:inline list="true" table="incident"/&gt;&#13;
+    &lt;/div&gt;&#13;
+  &lt;/div&gt;&#13;
+&#13;
+&lt;script&gt;&#13;
+&lt;![CDATA[&#13;
+    // 自定义搜索函数&#13;
+    function performCustomSearch(keyword) {&#13;
+      if (!keyword || keyword.length &lt; 2) {&#13;
+        document.getElementById('customSearchResults').innerHTML = '&lt;p class="text-muted"&gt;请输入搜索关键词...&lt;/p&gt;';&#13;
+        return;&#13;
+      }&#13;
+&#13;
+      var ga = new GlideAjax('GlobalClientServerUtils');&#13;
+      ga.addParam('sysparm_name', 'searchRecords');&#13;
+      ga.addParam('sysparm_keyword', keyword);&#13;
+      ga.addParam('sysparm_table', 'incident');&#13;
+      ga.getXML(handleCustomSearchResponse);&#13;
+    }&#13;
+&#13;
+    function handleCustomSearchResponse(response) {&#13;
+      var answer = response.responseXML.documentElement.getAttribute("answer");&#13;
+      var results = JSON.parse(answer);&#13;
+      var resultsHtml = '';&#13;
+&#13;
+      if (results.length &gt; 0) {&#13;
+        resultsHtml += '&lt;div class="search-results-container"&gt;';&#13;
+        resultsHtml += '&lt;p class="text-success"&gt;&lt;strong&gt;找到 ' + results.length + ' 条结果:&lt;/strong&gt;&lt;/p&gt;';&#13;
+        resultsHtml += '&lt;div class="list-group"&gt;';&#13;
+        &#13;
+        for (var i = 0; i &lt; results.length; i++) {&#13;
+          var item = results[i];&#13;
+          var description = item.short_description || '无描述';&#13;
+          var state = item.state || 'N/A';&#13;
+          &#13;
+          resultsHtml += '&lt;a href="incident.do?sys_id=' + item.sys_id + '" class="list-group-item list-group-item-action"&gt;';&#13;
+          resultsHtml += '&lt;div class="d-flex w-100 justify-content-between"&gt;';&#13;
+          resultsHtml += '&lt;h5 class="mb-1"&gt;' + item.number + '&lt;/h5&gt;';&#13;
+          resultsHtml += '&lt;small&gt;点击查看&lt;/small&gt;';&#13;
+          resultsHtml += '&lt;/div&gt;';&#13;
+          resultsHtml += '&lt;p class="mb-1"&gt;' + description + '&lt;/p&gt;';&#13;
+          resultsHtml += '&lt;small&gt;状态: ' + state + '&lt;/small&gt;';&#13;
+          resultsHtml += '&lt;/a&gt;';&#13;
+        }&#13;
+        &#13;
+        resultsHtml += '&lt;/div&gt;&lt;/div&gt;';&#13;
+      } else {&#13;
+        resultsHtml = '&lt;p class="text-warning"&gt;未找到匹配的结果。&lt;/p&gt;';&#13;
+      }&#13;
+&#13;
+      document.getElementById('customSearchResults').innerHTML = resultsHtml;&#13;
+    }&#13;
+]]&gt;&#13;
+&lt;/script&gt;&#13;
+&#13;
+  &lt;style&gt;&#13;
+    .search-results-container {&#13;
+      max-height: 400px;&#13;
+      overflow-y: auto;&#13;
+      margin-top: 15px;&#13;
+    }&#13;
+    .list-group-item {&#13;
+      border-left: 4px solid #007eff;&#13;
+    }&#13;
+  &lt;/style&gt;&#13;
+&lt;/j:jelly&gt;</html>
+        <name>case_list_with_custom_search</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-10 02:05:45</sys_created_on>
+        <sys_id>121d78f083203210f23ee270ceaad3aa</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>case_list_with_custom_search</sys_name>
+        <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+        <sys_update_name>sys_ui_page_121d78f083203210f23ee270ceaad3aa</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-10 02:09:30</sys_updated_on>
+    </sys_ui_page>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</application>
+        <file_path/>
+        <instance_id>148e975d1b26b5d8c84543f4bd4bcbe4</instance_id>
+        <instance_name>dev213023</instance_name>
+        <name>sys_ui_page_121d78f083203210f23ee270ceaad3aa</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page"><sys_ui_page action="INSERT_OR_UPDATE"><category>general</category><client_script/><description/><direct>false</direct><endpoint>x_1108048_wish_l_0_case_list_with_custom_search.do</endpoint><html>&lt;?xml version="1.0" encoding="utf-8" ?&gt;&#13;
+&lt;j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null"&gt;&#13;
+  &#13;
+  &lt;!-- 上部：自定义检索区块 --&gt;&#13;
+  &lt;div class="panel panel-default" style="margin-bottom: 20px;"&gt;&#13;
+    &lt;div class="panel-heading"&gt;&#13;
+      &lt;h3 class="panel-title"&gt;]]>🔍<![CDATA[ 快速检索&lt;/h3&gt;&#13;
+    &lt;/div&gt;&#13;
+    &lt;div class="panel-body"&gt;&#13;
+      &lt;div class="form-group"&gt;&#13;
+        &lt;input &#13;
+          type="text" &#13;
+          class="form-control" &#13;
+          id="customSearchInput" &#13;
+          placeholder="输入编号、描述等关键词..." &#13;
+          onkeyup="performCustomSearch(this.value)"&#13;
+          style="max-width: 400px;"&#13;
+        /&gt;&#13;
+        &lt;small class="text-muted"&gt;实时搜索，输入后自动显示结果&lt;/small&gt;&#13;
+      &lt;/div&gt;&#13;
+      &#13;
+      &lt;!-- 自定义搜索结果 --&gt;&#13;
+      &lt;div id="customSearchResults"&gt;&#13;
+        &lt;p class="text-muted"&gt;请输入搜索关键词...&lt;/p&gt;&#13;
+      &lt;/div&gt;&#13;
+    &lt;/div&gt;&#13;
+  &lt;/div&gt;&#13;
+&#13;
+  &lt;!-- 下部：保留原有的记录列表 --&gt;&#13;
+  &lt;div class="panel panel-default"&gt;&#13;
+    &lt;div class="panel-heading"&gt;&#13;
+      &lt;h3 class="panel-title"&gt;]]>📋<![CDATA[ 所有记录列表&lt;/h3&gt;&#13;
+    &lt;/div&gt;&#13;
+    &lt;div class="panel-body"&gt;&#13;
+      &lt;!-- 嵌入标准的列表视图 --&gt;&#13;
+      &lt;g2:evaluate var="jvar_table" expression="'incident'"/&gt;&#13;
+      &lt;g2:inline list="true" table="incident"/&gt;&#13;
+    &lt;/div&gt;&#13;
+  &lt;/div&gt;&#13;
+&#13;
+&lt;script&gt;&#13;
+&lt;![CDATA[&#13;
+    // 自定义搜索函数&#13;
+    function performCustomSearch(keyword) {&#13;
+      if (!keyword || keyword.length &lt; 2) {&#13;
+        document.getElementById('customSearchResults').innerHTML = '&lt;p class="text-muted"&gt;请输入搜索关键词...&lt;/p&gt;';&#13;
+        return;&#13;
+      }&#13;
+&#13;
+      var ga = new GlideAjax('GlobalClientServerUtils');&#13;
+      ga.addParam('sysparm_name', 'searchRecords');&#13;
+      ga.addParam('sysparm_keyword', keyword);&#13;
+      ga.addParam('sysparm_table', 'incident');&#13;
+      ga.getXML(handleCustomSearchResponse);&#13;
+    }&#13;
+&#13;
+    function handleCustomSearchResponse(response) {&#13;
+      var answer = response.responseXML.documentElement.getAttribute("answer");&#13;
+      var results = JSON.parse(answer);&#13;
+      var resultsHtml = '';&#13;
+&#13;
+      if (results.length &gt; 0) {&#13;
+        resultsHtml += '&lt;div class="search-results-container"&gt;';&#13;
+        resultsHtml += '&lt;p class="text-success"&gt;&lt;strong&gt;找到 ' + results.length + ' 条结果:&lt;/strong&gt;&lt;/p&gt;';&#13;
+        resultsHtml += '&lt;div class="list-group"&gt;';&#13;
+        &#13;
+        for (var i = 0; i &lt; results.length; i++) {&#13;
+          var item = results[i];&#13;
+          var description = item.short_description || '无描述';&#13;
+          var state = item.state || 'N/A';&#13;
+          &#13;
+          resultsHtml += '&lt;a href="incident.do?sys_id=' + item.sys_id + '" class="list-group-item list-group-item-action"&gt;';&#13;
+          resultsHtml += '&lt;div class="d-flex w-100 justify-content-between"&gt;';&#13;
+          resultsHtml += '&lt;h5 class="mb-1"&gt;' + item.number + '&lt;/h5&gt;';&#13;
+          resultsHtml += '&lt;small&gt;点击查看&lt;/small&gt;';&#13;
+          resultsHtml += '&lt;/div&gt;';&#13;
+          resultsHtml += '&lt;p class="mb-1"&gt;' + description + '&lt;/p&gt;';&#13;
+          resultsHtml += '&lt;small&gt;状态: ' + state + '&lt;/small&gt;';&#13;
+          resultsHtml += '&lt;/a&gt;';&#13;
+        }&#13;
+        &#13;
+        resultsHtml += '&lt;/div&gt;&lt;/div&gt;';&#13;
+      } else {&#13;
+        resultsHtml = '&lt;p class="text-warning"&gt;未找到匹配的结果。&lt;/p&gt;';&#13;
+      }&#13;
+&#13;
+      document.getElementById('customSearchResults').innerHTML = resultsHtml;&#13;
+    }&#13;
+]]&gt;&#13;
+&lt;/script&gt;&#13;
+&#13;
+  &lt;style&gt;&#13;
+    .search-results-container {&#13;
+      max-height: 400px;&#13;
+      overflow-y: auto;&#13;
+      margin-top: 15px;&#13;
+    }&#13;
+    .list-group-item {&#13;
+      border-left: 4px solid #007eff;&#13;
+    }&#13;
+  &lt;/style&gt;&#13;
+&lt;/j:jelly&gt;</html><name>case_list_with_custom_search</name><processing_script/><sys_class_name>sys_ui_page</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2025-10-10 02:05:45</sys_created_on><sys_id>121d78f083203210f23ee270ceaad3aa</sys_id><sys_mod_count>2</sys_mod_count><sys_name>case_list_with_custom_search</sys_name><sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package><sys_policy/><sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope><sys_update_name>sys_ui_page_121d78f083203210f23ee270ceaad3aa</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2025-10-10 02:09:30</sys_updated_on></sys_ui_page></record_update>]]></payload>
+        <payload_hash>-2133523369</payload_hash>
+        <record_name>case_list_with_custom_search</record_name>
+        <reverted_from/>
+        <source>b5e45da083203210f23ee270ceaad385</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-10 02:09:30</sys_created_on>
+        <sys_id>bf6089b483203210f23ee270ceaad33c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>199cbe166630000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-10 02:09:30</sys_updated_on>
+        <type>UI Page</type>
+        <update_guid>376089b4e1203210bdeb323dad862a3c</update_guid>
+        <update_guid_history>376089b4e1203210bdeb323dad862a3c:-2133523369,dc408db47820321003f831c695f996be:394202628,059f7cb40c2032104e16384bca230e52:-1585841036</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-10 02:15:45</sys_created_on>
+        <sys_db_object display_value="" name="sys_ui_page">sys_ui_page</sys_db_object>
+        <sys_id>21f4aef8b95c4b50949a9e3d8b8e1240</sys_id>
+        <sys_metadata>121d78f083203210f23ee270ceaad3aa</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>case_list_with_custom_search</sys_name>
+        <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+        <sys_scope_delete display_value="">a4920f7f448b4e8f81393d28c79463c9</sys_scope_delete>
+        <sys_update_name>sys_ui_page_121d78f083203210f23ee270ceaad3aa</sys_update_name>
+        <sys_update_version display_value="sys_ui_page_121d78f083203210f23ee270ceaad3aa">bf6089b483203210f23ee270ceaad33c</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-10 02:15:45</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

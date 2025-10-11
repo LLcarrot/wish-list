@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role">
+    <sys_user_role action="INSERT_OR_UPDATE">
+        <assignable_by/>
+        <can_delegate>true</can_delegate>
+        <description/>
+        <elevated_privilege>false</elevated_privilege>
+        <grantable>true</grantable>
+        <includes_roles/>
+        <name>x_1108048_wish_l_0.ka_manager</name>
+        <scoped_admin>false</scoped_admin>
+        <suffix>ka_manager</suffix>
+        <sys_class_name>sys_user_role</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-09 09:10:01</sys_created_on>
+        <sys_id>8a17d12883a03210f23ee270ceaad3a0</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1108048_wish_l_0.ka_manager</sys_name>
+        <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+        <sys_update_name>sys_user_role_8a17d12883a03210f23ee270ceaad3a0</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-09 09:10:01</sys_updated_on>
+    </sys_user_role>
+</record_update>

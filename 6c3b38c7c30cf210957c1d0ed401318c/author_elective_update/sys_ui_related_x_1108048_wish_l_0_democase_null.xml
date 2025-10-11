@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_related action="DELETE" sys_domain="global" table="x_1108048_wish_l_0_democase" version="2" view="">
+        <sys_ui_related_list action="INSERT_OR_UPDATE">
+            <calculated_name>DemoCase - </calculated_name>
+            <filter/>
+            <name>x_1108048_wish_l_0_democase</name>
+            <order_by/>
+            <position/>
+            <related_list/>
+            <sys_class_name>sys_ui_related_list</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2025-10-10 05:52:27</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>f2f2353883243210f23ee270ceaad3aa</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>DemoCase - </sys_name>
+            <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+            <sys_update_name>sys_ui_related_x_1108048_wish_l_0_democase_null</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2025-10-10 05:52:27</sys_updated_on>
+            <sys_user/>
+            <view/>
+            <view_name/>
+        </sys_ui_related_list>
+        <sys_ui_related_list action="INSERT_OR_UPDATE">
+            <calculated_name>DemoCase - </calculated_name>
+            <filter/>
+            <name>x_1108048_wish_l_0_democase</name>
+            <order_by/>
+            <position/>
+            <related_list/>
+            <sys_class_name>sys_ui_related_list</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2025-10-10 05:52:27</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>f2f2353883243210f23ee270ceaad3aa</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>DemoCase - </sys_name>
+            <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+            <sys_update_name>sys_ui_related_x_1108048_wish_l_0_democase_null</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2025-10-10 05:52:27</sys_updated_on>
+            <sys_user/>
+            <view/>
+            <view_name/>
+        </sys_ui_related_list>
+    </sys_ui_related>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</application>
+        <file_path/>
+        <instance_id>148e975d1b26b5d8c84543f4bd4bcbe4</instance_id>
+        <instance_name>dev213023</instance_name>
+        <name>sys_ui_related_x_1108048_wish_l_0_democase_null</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_ui_related sys_domain="global" table="x_1108048_wish_l_0_democase" version="2" view=""><sys_ui_related_list action="INSERT_OR_UPDATE"><calculated_name>DemoCase - </calculated_name><filter/><name>x_1108048_wish_l_0_democase</name><order_by/><position/><related_list/><sys_class_name>sys_ui_related_list</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2025-10-10 05:52:27</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>f2f2353883243210f23ee270ceaad3aa</sys_id><sys_mod_count>0</sys_mod_count><sys_name>DemoCase - </sys_name><sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package><sys_policy/><sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope><sys_update_name>sys_ui_related_x_1108048_wish_l_0_democase_null</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2025-10-10 05:52:27</sys_updated_on><sys_user/><view/><view_name/></sys_ui_related_list><sys_ui_related_list action="INSERT_OR_UPDATE"><calculated_name>DemoCase - </calculated_name><filter/><name>x_1108048_wish_l_0_democase</name><order_by/><position/><related_list/><sys_class_name>sys_ui_related_list</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2025-10-10 05:52:27</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>f2f2353883243210f23ee270ceaad3aa</sys_id><sys_mod_count>0</sys_mod_count><sys_name>DemoCase - </sys_name><sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package><sys_policy/><sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope><sys_update_name>sys_ui_related_x_1108048_wish_l_0_democase_null</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2025-10-10 05:52:27</sys_updated_on><sys_user/><view/><view_name/></sys_ui_related_list></sys_ui_related></record_update>]]></payload>
+        <payload_hash>-242777760</payload_hash>
+        <record_name>DemoCase</record_name>
+        <reverted_from/>
+        <source>b5e45da083203210f23ee270ceaad385</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-10 05:54:56</sys_created_on>
+        <sys_id>ca04797883243210f23ee270ceaad3e2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>199ccafc78b0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-10 05:54:56</sys_updated_on>
+        <type>Related Lists</type>
+        <update_guid>8a04797800243210be628ba4582610e2</update_guid>
+        <update_guid_history>8a04797800243210be628ba4582610e2:-242777760</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-10 05:54:56</sys_created_on>
+        <sys_db_object display_value="" name="sys_ui_related_list">sys_ui_related_list</sys_db_object>
+        <sys_id>04355548b90e4a46908bdf9255786c31</sys_id>
+        <sys_metadata>f2f2353883243210f23ee270ceaad3aa</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>DemoCase - </sys_name>
+        <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+        <sys_parent display_value="DemoCase">d017512883a03210f23ee270ceaad36c</sys_parent>
+        <sys_policy/>
+        <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+        <sys_scope_delete display_value="">a4920f7f448b4e8f81393d28c79463c9</sys_scope_delete>
+        <sys_update_name>sys_ui_related_x_1108048_wish_l_0_democase_null</sys_update_name>
+        <sys_update_version display_value="sys_ui_related_x_1108048_wish_l_0_democase_null">ca04797883243210f23ee270ceaad3e2</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-10 05:54:56</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

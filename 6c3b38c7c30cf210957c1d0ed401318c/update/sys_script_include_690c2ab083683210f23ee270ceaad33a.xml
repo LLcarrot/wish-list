@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_1108048_wish_l_0.DemoCaseClientUtils</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description/>
+        <mobile_callable>false</mobile_callable>
+        <name>DemoCaseClientUtils</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var DemoCaseClientUtils = Class.create();
+DemoCaseClientUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+    
+    getRecords: function() {
+        var tableName = this.getParameter('sysparm_table');
+        var query = this.getParameter('sysparm_query') || '';
+        var fields = this.getParameter('sysparm_fields') || 'sys_id,title,question';
+        
+        var gr = new GlideRecord(tableName);
+        if (query) {
+            gr.addEncodedQuery(query);
+        }
+        gr.query();
+        
+        var records = [];
+        while (gr.next()) {
+            var record = {};
+            var fieldArray = fields.split(',');
+            fieldArray.forEach(function(field) {
+                record[field] = gr.getDisplayValue(field) || gr.getValue(field);
+            });
+            records.push(record);
+        }
+        
+        return JSON.stringify(records);
+    },
+    
+    createRecord: function() {
+        var tableName = this.getParameter('sysparm_table');
+        var values = JSON.parse(this.getParameter('sysparm_values'));
+        
+        var gr = new GlideRecord(tableName);
+        gr.initialize();
+        for (var field in values) {
+            if (values.hasOwnProperty(field)) {
+                gr.setValue(field, values[field]);
+            }
+        }
+        return gr.insert();
+    },
+    
+    updateRecord: function() {
+        var tableName = this.getParameter('sysparm_table');
+        var sys_id = this.getParameter('sysparm_sys_id');
+        var values = JSON.parse(this.getParameter('sysparm_values'));
+        
+        var gr = new GlideRecord(tableName);
+        if (gr.get(sys_id)) {
+            for (var field in values) {
+                if (values.hasOwnProperty(field)) {
+                    gr.setValue(field, values[field]);
+                }
+            }
+            return gr.update();
+        }
+        return null;
+    },
+    
+    deleteRecord: function() {
+        var tableName = this.getParameter('sysparm_table');
+        var sys_id = this.getParameter('sysparm_sys_id');
+        
+        var gr = new GlideRecord(tableName);
+        if (gr.get(sys_id)) {
+            return gr.deleteRecord();
+        }
+        return false;
+    },
+    
+    _type: 'DemoCaseClientUtils'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-10 10:00:41</sys_created_on>
+        <sys_id>690c2ab083683210f23ee270ceaad33a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>DemoCaseClientUtils</sys_name>
+        <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+        <sys_update_name>sys_script_include_690c2ab083683210f23ee270ceaad33a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-10 10:00:41</sys_updated_on>
+    </sys_script_include>
+</record_update>
