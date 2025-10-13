@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="DELETE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_1108048_wish_l_0.CaseDemoUtils</api_name>
+        <caller_access>1</caller_access>
+        <client_callable>true</client_callable>
+        <description/>
+        <mobile_callable>false</mobile_callable>
+        <name>CaseDemoUtils</name>
+        <sandbox_callable>true</sandbox_callable>
+        <script><![CDATA[/* global AbstractAjaxProcessor, GlideRecord, JSON, gs */
+var CaseDemoUtils = Class.create();
+CaseDemoUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+  
+    searchCaseDemoRecords: function() {
+		gs.info("Entering searchCaseDemoRecords method");
+        var keyword = this.getParameter('sysparm_keyword');
+		gs.info("Received keyword: " + keyword); // 参数日志
+        var results = [];
+        
+        // 使用自定义表名
+        var gr = new GlideRecord('x_1108048_wish_l_0_democase');
+        
+        if (keyword) {
+            // 全文搜索，匹配所有可搜索字段
+            gr.addQuery('123TEXTQUERY321', keyword);
+        }
+        gr.addActiveQuery();
+        gr.orderByDesc('sys_updated_on');
+        gr.setLimit(15);
+        gr.query();
+        
+        while (gr.next()) {
+            results.push({
+                sys_id: gr.getUniqueValue(),
+                number: gr.getDisplayValue('number') || gr.getDisplayValue('u_number'), // 根据实际字段名调整
+                title: gr.getDisplayValue('title') || gr.getDisplayValue('u_title'),
+                question: gr.getDisplayValue('question') || gr.getDisplayValue('u_question'),
+                // 添加其他需要显示的字段
+                ask_for: gr.getDisplayValue('ask_for') || gr.getDisplayValue('u_ask_for'),
+                ask_from: gr.getDisplayValue('ask_from') || 'N/A'
+            });
+        }
+        
+        return JSON.stringify(results);
+    },
+
+    type: 'CaseDemoUtils'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-10 07:12:57</sys_created_on>
+        <sys_id>b5c5867083a43210f23ee270ceaad38b</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>CaseDemoUtils</sys_name>
+        <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+        <sys_update_name>sys_script_include_b5c5867083a43210f23ee270ceaad38b</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-11 10:27:56</sys_updated_on>
+    </sys_script_include>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</application>
+        <file_path/>
+        <instance_id>148e975d1b26b5d8c84543f4bd4bcbe4</instance_id>
+        <instance_name>dev213023</instance_name>
+        <name>sys_script_include_b5c5867083a43210f23ee270ceaad38b</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_script_include"&gt;&lt;sys_script_include action="INSERT_OR_UPDATE"&gt;&lt;access&gt;public&lt;/access&gt;&lt;active&gt;true&lt;/active&gt;&lt;api_name&gt;x_1108048_wish_l_0.CaseDemoUtils&lt;/api_name&gt;&lt;caller_access&gt;1&lt;/caller_access&gt;&lt;client_callable&gt;true&lt;/client_callable&gt;&lt;description/&gt;&lt;mobile_callable&gt;false&lt;/mobile_callable&gt;&lt;name&gt;CaseDemoUtils&lt;/name&gt;&lt;sandbox_callable&gt;true&lt;/sandbox_callable&gt;&lt;script&gt;&lt;![CDATA[/* global AbstractAjaxProcessor, GlideRecord, JSON, gs */
+var CaseDemoUtils = Class.create();
+CaseDemoUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+  
+    searchCaseDemoRecords: function() {
+		gs.info("Entering searchCaseDemoRecords method");
+        var keyword = this.getParameter('sysparm_keyword');
+		gs.info("Received keyword: " + keyword); // 参数日志
+        var results = [];
+        
+        // 使用自定义表名
+        var gr = new GlideRecord('x_1108048_wish_l_0_democase');
+        
+        if (keyword) {
+            // 全文搜索，匹配所有可搜索字段
+            gr.addQuery('123TEXTQUERY321', keyword);
+        }
+        gr.addActiveQuery();
+        gr.orderByDesc('sys_updated_on');
+        gr.setLimit(15);
+        gr.query();
+        
+        while (gr.next()) {
+            results.push({
+                sys_id: gr.getUniqueValue(),
+                number: gr.getDisplayValue('number') || gr.getDisplayValue('u_number'), // 根据实际字段名调整
+                title: gr.getDisplayValue('title') || gr.getDisplayValue('u_title'),
+                question: gr.getDisplayValue('question') || gr.getDisplayValue('u_question'),
+                // 添加其他需要显示的字段
+                ask_for: gr.getDisplayValue('ask_for') || gr.getDisplayValue('u_ask_for'),
+                ask_from: gr.getDisplayValue('ask_from') || 'N/A'
+            });
+        }
+        
+        return JSON.stringify(results);
+    },
+
+    type: 'CaseDemoUtils'
+});]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_script_include&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2025-10-10 07:12:57&lt;/sys_created_on&gt;&lt;sys_id&gt;b5c5867083a43210f23ee270ceaad38b&lt;/sys_id&gt;&lt;sys_mod_count&gt;7&lt;/sys_mod_count&gt;&lt;sys_name&gt;CaseDemoUtils&lt;/sys_name&gt;&lt;sys_package display_value="Wish List" source="x_1108048_wish_l_0"&gt;6c3b38c7c30cf210957c1d0ed401318c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Wish List"&gt;6c3b38c7c30cf210957c1d0ed401318c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_script_include_b5c5867083a43210f23ee270ceaad38b&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2025-10-11 10:27:56&lt;/sys_updated_on&gt;&lt;/sys_script_include&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-2130176490</payload_hash>
+        <record_name>CaseDemoUtils</record_name>
+        <reverted_from/>
+        <source>b5e45da083203210f23ee270ceaad385</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-11 10:27:56</sys_created_on>
+        <sys_id>fe1c7bc183e0b210f23ee270ceaad38b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>199d2d015df0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-11 10:27:56</sys_updated_on>
+        <type>Script Include</type>
+        <update_guid>761c7bc1f8e0b210998716cd27a1518b</update_guid>
+        <update_guid_history>761c7bc1f8e0b210998716cd27a1518b:-2130176490,67fbbb81eee0b210e79f16976271956f:36213089,c8b577c949a0b210c13879eab9c0fb10:-1738243403,3275b7c981a0b2107514577a083fbcfb:-1865789959,5425b7c906a0b210416132512ee37af2:766742280,1954374988a0b210af750831f0b5954f:369292310,40217b8515a0b21023f7fc13fca2cc27:-382914256,05e5ca701fa4321043e3208248d42d0b:-1292990996</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-10-13 01:42:52</sys_created_on>
+        <sys_db_object display_value="" name="sys_script_include">sys_script_include</sys_db_object>
+        <sys_id>2fd99ef7700f4040b9770be0c486e400</sys_id>
+        <sys_metadata>b5c5867083a43210f23ee270ceaad38b</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>CaseDemoUtils</sys_name>
+        <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
+        <sys_scope_delete display_value="">a4920f7f448b4e8f81393d28c79463c9</sys_scope_delete>
+        <sys_update_name>sys_script_include_b5c5867083a43210f23ee270ceaad38b</sys_update_name>
+        <sys_update_version display_value="sys_script_include_b5c5867083a43210f23ee270ceaad38b">fe1c7bc183e0b210f23ee270ceaad38b</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-10-13 01:42:52</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

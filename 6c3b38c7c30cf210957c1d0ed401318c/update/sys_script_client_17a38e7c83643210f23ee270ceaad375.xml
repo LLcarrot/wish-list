@@ -6,7 +6,7 @@
         <description/>
         <field/>
         <global>true</global>
-        <isolate_script>true</isolate_script>
+        <isolate_script>false</isolate_script>
         <messages/>
         <name>DemoCase Module Search</name>
         <order/>
@@ -22,7 +22,7 @@ function addSearchComponent() {
     if (g_form.getElement('customSearchContainer')) {
         return;
     }
-    
+
     // 创建搜索组件
     var searchHTML = [
         '<div class="panel panel-default" id="customSearchContainer" style="margin-bottom: 15px;">',
@@ -34,8 +34,8 @@ function addSearchComponent() {
         '            <input type="text" class="form-control" id="moduleSearchInput" ',
         '                   placeholder="输入关键词搜索..." ',
         '                   style="width: 300px; margin-right: 10px;">',
-        '            <button class="btn btn-primary" onclick="performModuleSearch()">搜索</button>',
-        '            <button class="btn btn-default" onclick="clearModuleSearch()" style="margin-left: 5px;">清除</button>',
+        '            <button class="btn btn-primary" onclick="searchButton">搜索</button>',
+        '            <button class="btn btn-default" onclick="clearButton" style="margin-left: 5px;">清除</button>',
         '        </div>',
         '        <div id="moduleSearchResults" style="margin-top: 10px; display: none;">',
         '            <div class="list-group" id="searchResultsList"></div>',
@@ -47,14 +47,12 @@ function addSearchComponent() {
     // 插入到按钮上方
     var listHeader = g_form.getElement('x_1108048_wish_l_0_democase.ask_for');
     if (listHeader) {
-        listHeader.insertAdjacentHTML('beforebegin', searchHTML);
-    } else {
-        // 备用插入位置
-        var contentContainer = g_form.getElement('.list-content') || g_form.getElement('#content');
-        if (contentContainer) {
-            contentContainer.insertAdjacentHTML('afterbegin', searchHTML);
-        }
+		var containerDiv = listHeader.closest('.form-group');
+        containerDiv.insertAdjacentHTML('afterend', searchHTML);
     }
+
+	// 使用事件委托，不需要等待元素加载
+    setupEventDelegation(containerDiv.parentNode);
 }
 
 function performModuleSearch() {
@@ -65,12 +63,35 @@ function performModuleSearch() {
         return;
     }
     
-    // 显示加载状态
-    g_form.getElement('moduleSearchResults').style.display = 'block';
-    g_form.getElement('searchResultsList').innerHTML = '<div class="list-group-item">搜索中...</div>';
+    // 显示加载状态 - 优化为表格形式的加载中
+    var divElements = getSearchElement('moduleSearchInput', 'customSearchContainer', ['moduleSearchResults', 'searchResultsList']);
+    divElements.moduleSearchResults.style.display = 'block';
     
-    // 使用 AJAX 搜索
-    var ga = new GlideAjax('CaseDemoUtils');
+    var loadingHtml = [
+        '<div class="table-responsive">',
+        '<table class="table table-bordered table-condensed" style="font-size: 12px; margin-bottom: 0; opacity: 0.7;">',
+        '    <thead>',
+        '        <tr class="active">',
+        '            <th style="width: 100px;">编号</th>',
+        '            <th>问题</th>',
+        '            <th style="width: 80px;">状态</th>',
+        '        </tr>',
+        '    </thead>',
+        '    <tbody>',
+        '        <tr>',
+        '            <td colspan="3" class="text-center" style="padding: 20px;">',
+        '                <span class="icon-loading icon-spin"></span>',
+        '                搜索中...',
+        '            </td>',
+        '        </tr>',
+        '    </tbody>',
+        '</table>',
+        '</div>'
+    ].join('');
+    
+    divElements.searchResultsList.innerHTML = loadingHtml;
+    
+    var ga = new GlideAjax('global.GlobalCaseDemoUtils');
     ga.addParam('sysparm_name', 'searchCaseDemoRecords');
     ga.addParam('sysparm_keyword', keyword);
     ga.getXML(handleModuleSearchResponse);
@@ -78,26 +99,123 @@ function performModuleSearch() {
 
 function handleModuleSearchResponse(response) {
     var answer = response.responseXML.documentElement.getAttribute("answer");
-    var results = JSON.parse(answer);
-    var resultsHtml = '';
     
-    if (results.length > 0) {
-        for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            resultsHtml += '<a href="' + currentTableName + '.do?sys_id=' + item.sys_id + '" class="list-group-item" target="_blank">';
-            resultsHtml += '<strong>' + (item.number || item.sys_id) + '</strong>: ' + (item.title || '无描述');
-            resultsHtml += '</a>';
+    try {
+        var result = JSON.parse(answer);
+        
+        var resultsHtml = '';
+        
+        if (result && result.length > 0) {
+            // 创建表格形式的搜索结果
+            resultsHtml = [
+                '<div class="table-responsive">',
+                '<table class="table table-bordered table-hover table-condensed" style="font-size: 12px; margin-bottom: 0;">',
+                '    <thead>',
+                '        <tr class="info">',
+                '            <th style="width: 100px;">编号</th>',
+                '            <th>问题</th>',
+                '            <th style="width: 80px;">操作</th>',
+                '        </tr>',
+                '    </thead>',
+                '    <tbody>'
+            ].join('');
+            
+            // 添加数据行
+            result.forEach(function(item, index) {
+                var recordUrl = currentTableName + '.do?sys_id=' + (item.sys_id || '');
+                resultsHtml += [
+                    '<tr>',
+                    '    <td><strong>' + (item.number || 'N/A') + '</strong></td>',
+                    '    <td>' + (item.question || '无描述') + '</td>',
+                    '    <td>',
+                    '        <a href="' + recordUrl + '" class="btn btn-xs btn-default" target="_blank" title="查看详情">',
+                    '            <span class="icon-search"></span> 查看',
+                    '        </a>',
+                    '    </td>',
+                    '</tr>'
+                ].join('');
+            });
+            
+            resultsHtml += [
+                '    </tbody>',
+                '</table>',
+                '<div class="text-right text-muted" style="padding: 5px 10px; font-size: 11px;">',
+                '    找到 ' + result.length + ' 条记录',
+                '</div>',
+                '</div>'
+            ].join('');
+            
+        } else {
+            // 没有找到结果
+            resultsHtml = [
+                '<div class="alert alert-warning" style="margin-bottom: 0; padding: 8px 12px;">',
+                '    <span class="icon-alert-triangle"></span> ',
+                '    未找到匹配的记录',
+                '</div>'
+            ].join('');
         }
-    } else {
-        resultsHtml = '<div class="list-group-item text-muted">未找到匹配的记录</div>';
+        
+        // 更新结果显示区域
+        var divElements = getSearchElement('moduleSearchInput', 'customSearchContainer', ['searchResultsList']);
+        if (divElements.searchResultsList) {
+            divElements.searchResultsList.innerHTML = resultsHtml;
+        }
+        
+    } catch (e) {
+        
+        // 显示错误信息
+        var errorHtml = [
+            '<div class="alert alert-danger" style="margin-bottom: 0; padding: 8px 12px;">',
+            '    <span class="icon-error"></span> ',
+            '    数据处理错误: ' + e.message,
+            '</div>'
+        ].join('');
+        
+        var divElements = getSearchElement('moduleSearchInput', 'customSearchContainer', ['searchResultsList']);
+        if (divElements.searchResultsList) {
+            divElements.searchResultsList.innerHTML = errorHtml;
+        }
     }
-    
-    g_form.getElement('searchResultsList').innerHTML = resultsHtml;
 }
 
 function clearModuleSearch() {
     g_form.getElement('moduleSearchInput').value = '';
-    g_form.getElement('moduleSearchResults').style.display = 'none';
+    var divElements = getSearchElement('moduleSearchInput', 'customSearchContainer', ['moduleSearchResults']);
+    divElements.moduleSearchResults.style.display = 'none';
+}
+
+function getSearchElement(baseElement, parentContainer, searchElements) {
+	// 向上查找容器
+	var elm = g_form.getElement(baseElement);
+	var container = elm.closest('#' + parentContainer);
+
+	var result = {};
+
+	searchElements.forEach(function(searchElement){
+		result[searchElement] = container.querySelector('#' + searchElement);
+	});
+
+	return result;
+}
+
+function setupEventDelegation(container) {
+    container.addEventListener('click', function(event) {
+        var target = event.target;
+        
+        if (target.id === 'searchButton' || 
+            (target.tagName === 'BUTTON' && target.textContent.includes('搜索'))) {
+            event.preventDefault();
+            event.stopPropagation();
+            performModuleSearch();
+        }
+        
+        if (target.id === 'clearButton' || 
+            (target.tagName === 'BUTTON' && target.textContent.includes('清除'))) {
+            event.preventDefault();
+            event.stopPropagation();
+            clearModuleSearch();
+        }
+    });
 }
 
 // 获取当前表名
@@ -108,7 +226,7 @@ var currentTableName = typeof g_list !== 'undefined' ? g_list.getTableName() : '
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>17a38e7c83643210f23ee270ceaad375</sys_id>
-        <sys_mod_count>14</sys_mod_count>
+        <sys_mod_count>48</sys_mod_count>
         <sys_name>DemoCase Module Search</sys_name>
         <sys_overrides/>
         <sys_package display_value="Wish List" source="x_1108048_wish_l_0">6c3b38c7c30cf210957c1d0ed401318c</sys_package>
@@ -116,7 +234,7 @@ var currentTableName = typeof g_list !== 'undefined' ? g_list.getTableName() : '
         <sys_scope display_value="Wish List">6c3b38c7c30cf210957c1d0ed401318c</sys_scope>
         <sys_update_name>sys_script_client_17a38e7c83643210f23ee270ceaad375</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2025-10-10 09:37:05</sys_updated_on>
+        <sys_updated_on>2025-10-13 06:43:14</sys_updated_on>
         <table>x_1108048_wish_l_0_democase</table>
         <type>onLoad</type>
         <ui_type>10</ui_type>
